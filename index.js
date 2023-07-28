@@ -11,7 +11,11 @@ const axios = require('axios');
 
 dotenv.config();
 app.use(express.json());
-app.use(cors());
+app.use(cors(
+  {
+    origin : ['https://awesome-cv.onrender.com']
+  }
+));
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
