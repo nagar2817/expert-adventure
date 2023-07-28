@@ -5,33 +5,56 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
   try {
-    const { name, address, email, phoneNumber } = req.body;
-    const client = await pool.connect();
-    const result = await client.query(
-      'INSERT INTO "userinfo" (name, address, email, phoneNumber) VALUES ($1, $2, $3, $4) RETURNING *;',
-      [name, address, email, phoneNumber]
-    );
-    client.release();
-    console.log("inserted seccussfully");
-    res.json(result.rows[0]);
+    const client =  await pool.connect();
+    const { username, firstname, lastname, email, phonenumber,address } = req.body;
+    const checkQuery = 'SELECT * FROM userinfo WHERE username = $1';
+    const checkResult = await client.query(checkQuery, [username]);
+    if (checkResult.rows.length > 0) {
+      // User with the provided username already exists, perform UPDATE operation
+      const updateQuery = `
+        UPDATE userinfo
+        SET firstname = $2, lastname = $3, email = $4, phonenumber = $5, address = $6
+        WHERE username = $1
+      `;
+
+      const result = await client.query(updateQuery, [username, firstname, lastname, email, phonenumber, address]);
+    client.release(); 
+    res.status(200).json(result.rows[0]); // Respond with a success status
+      // return res.json(result.rows[0]);
+
+    }else{
+      const result = await client.query(
+        'INSERT INTO "userinfo" (username, firstname,lastname, email, phonenumber, address) VALUES ($1, $2, $3, $4,$5,$6) RETURNING *;',
+        [username,firstname,lastname, email, phonenumber, address]
+      );
+    client.release(); 
+          // res.sendStatus(200);
+      // return res.json(result.rows[0]);
+    res.status(200).json(result.rows[0]); // Respond with a success status
+
+    }
+    // console.log("inserted seccussfully");
+    // res.json(result.rows[0]);
   } catch (err) {
     console.error('Error executing query', err);
     res.status(500).json({ error: 'Internal Server Error' });
   }
-});
+}); 
 
-router.get('/:userId', async (req, res) => {
-    const userId = req.params.userId;
+router.get('/:username', async (req, res) => {
+    const username = req.params.username;
   
     try {
       const client = await pool.connect();
-      const result = await client.query('SELECT * FROM "userinfo" WHERE id = $1;', [userId]);
+      const result = await client.query('SELECT * FROM "userinfo" WHERE username = $1;', [username]);  
       client.release();
   
       if (result.rows.length === 0) {
-        return res.status(404).json({ error: 'User not found' });
-      }
-  
+        console.log("no users");
+        res.json({});
+        // return res.status(404).json({ error: 'User not found' });
+      } 
+      
       res.json(result.rows[0]);
     } catch (err) {
       console.error('Error executing query', err);
@@ -39,47 +62,47 @@ router.get('/:userId', async (req, res) => {
     }
   });
 
-router.delete('/:userId', async (req, res) => {
-    const userId = req.params.userId;
+// router.delete('/:userId', async (req, res) => {
+//     const userId = req.params.userId;
   
-    try {
-      const client = await pool.connect();
-      const result = await client.query('DELETE FROM "userinfo" WHERE id = $1 RETURNING *;', [userId]);
-      client.release();
+//     try {
+//       const client = await pool.connect();
+//       const result = await client.query('DELETE FROM "userinfo" WHERE id = $1 RETURNING *;', [userId]);
+//       client.release();
   
-      if (result.rows.length === 0) {
-        return res.status(404).json({ error: 'User not found' });
-      }
+//       if (result.rows.length === 0) {
+//         return res.status(404).json({ error: 'User not found' });
+//       }
   
-      res.json({ message: 'User deleted successfully' });
-    } catch (err) {
-      console.error('Error executing query', err);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  });
+//       res.json({ message: 'User deleted successfully' });
+//     } catch (err) {
+//       console.error('Error executing query', err);
+//       res.status(500).json({ error: 'Internal Server Error' });
+//     }
+//   }); 
 
-router.put('/:userId', async (req, res) => {
-    const userId = req.params.userId;
-    console.log(req.body);
-    const { name, address, email, phoneNumber } = req.body;
+// router.put('/:userId', async (req, res) => {
+//     const userId = req.params.userId;
+//     console.log(req.body);
+//     const { username,firstName,lastName, address, email, phoneNumber } = req.body;
   
-    try {
-      const client = await pool.connect();
-      const result = await client.query(
-        'UPDATE "userinfo" SET name = $1, address = $2, email = $3, phoneNumber = $4 WHERE id = $5 RETURNING *;',
-        [name, address, email, phoneNumber, userId]
-      );
-      client.release();
+//     try {
+//       const client = await pool.connect();
+//       const result = await client.query(
+//         'UPDATE "userinfo" SET usernmae = $1,firstName=$2,lastName=$3, address = $4, email = $5, phoneNumber = $6 WHERE id = $6 RETURNING *;',
+//         [username,firstName,lastName, address, email, phoneNumber, userId]
+//       );
+//       client.release();
   
-      if (result.rows.length === 0) {
-        return res.status(404).json({ error: 'User not found' });
-      }
+//       if (result.rows.length === 0) {
+//         return res.status(404).json({ error: 'User not found' });
+//       }
   
-      res.json(result.rows[0]);
-    } catch (err) {
-      console.error('Error executing query', err);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  });
+//       res.json(result.rows[0]);
+//     } catch (err) {
+//       console.error('Error executing query', err);
+//       res.status(500).json({ error: 'Internal Server Error' });
+//     }
+//   });
 
 module.exports = router;
