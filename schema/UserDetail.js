@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema({
   name: { type: String },
   email: { type: String, unique: true }, 
   aboutMe: { type: String },
-  skillsSet: skillsSetSchema,
+  skillsData: [skillsSetSchema],
   projects: [projectSchema],
   experience: [experienceSchema],
   education: [educationSchema],
