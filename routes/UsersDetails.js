@@ -4,12 +4,12 @@ const router = express.Router();
 const User = require("../schema/UserDetail");
 
 // Fetch user details by userId
-router.get("/:email", async (req, res) => {
+router.get("/:username", async (req, res) => {
   try {
-    const { email } = req.params;
+    const { username } = req.params;
     // const userIdToFind = "3"; // Assuming you have the _id value as a string
 
-    const user = await User.findOne({email});  
+    const user = await User.findOne({username});  
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -57,22 +57,22 @@ router.post("/new", async (req, res) => {
   }
 });
 
-router.post("/:email", async (req, res) => {
+router.post("/:username", async (req, res) => {
   try {
-    const { email } = req.params;
+    const { username } = req.params;
     // console.log("req body",req.body);
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ username });
 
     if (existingUser) {
       // User exists, update related data
-      const updatedUser = await User.findOneAndUpdate({ email }, req.body, {
+      const updatedUser = await User.findOneAndUpdate({ username }, req.body, {
         new: true,
       });
       console.log("updated user",updatedUser)
       return res.json(updatedUser);
     } else {
       // User doesn't exist, create a new user
-      const newUser = await User.create({ ...req.body, email });
+      const newUser = await User.create({ ...req.body, username });
       return res.json(newUser);
     }
   } catch (error) {
