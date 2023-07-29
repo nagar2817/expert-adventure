@@ -71,6 +71,7 @@ router.post("/:username", async (req, res) => {
       console.log("updated user",updatedUser)
       return res.json(updatedUser);
     } else {
+      console.log("creating new user....");
       // User doesn't exist, create a new user
       const newUser = await User.create({ ...req.body, username });
       return res.json(newUser);
@@ -81,37 +82,5 @@ router.post("/:username", async (req, res) => {
   }
 });
 
-
-router.post('/:email/projects/:projectName', async (req, res) => {
-  try {
-    const { email, projectName } = req.params;
-    const updatedProjectData = req.body;
-
-    // Find the user by email
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    // Find the index of the project with the specified name within the projects array
-    const projectIndex = user.projects.findIndex((project) => project.name === projectName);
-
-    if (projectIndex === -1) {
-      return res.status(404).json({ message: 'Project not found' });
-    }
-
-    // Update the project data within the projects array
-    user.projects[projectIndex] = { ...user.projects[projectIndex], ...updatedProjectData };
-
-    // Save the updated user data
-    await user.save();
-
-    return res.json(user);
-  } catch (error) {
-    console.error('Error updating project data:', error);
-    return res.status(500).json({ message: 'Server error' });
-  }
-});
 
 module.exports = router;

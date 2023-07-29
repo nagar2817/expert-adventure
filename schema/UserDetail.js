@@ -43,7 +43,7 @@ const skillsSetSchema = new mongoose.Schema({
 
 const userSchema = new mongoose.Schema({
   //   _id: { type: mongoose.Types.ObjectId, auto: true },
-  name: { type: String },
+  // name: { type: String },
   email: { type: String }, 
   username:{type:String},
   aboutMe: { type: String },
