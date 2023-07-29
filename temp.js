@@ -37,9 +37,9 @@ const textTweet = async (res) => {
   }
 };
 
-const tweet = async (image) => {
+const tweet = async (url) => {
 
-    const uri = image;
+    const uri = url;
     const filename = "image.png"; 
   
     download(uri, filename, async function(){
@@ -55,6 +55,8 @@ const tweet = async (image) => {
             console.log(e)
         }
     });
+
+    console.log('posted..')
   }
 
 // Create tweet function which post
@@ -98,16 +100,17 @@ const mediaTweet = async (res, imageFile) => {
 
 // Call any of methods and you are done
 router.post("/api/uploadToTwitter", (req, res) => {
-    console.log(req.body) 
-  const {image} = req.body;
-  console.log(image);
-  if (!image) {
-    return res.status(400).json({ error: "No image file provided." });
-  }
-  console.log("image selected..");
+    // console.log(req.body) 
+  const {url} = req.body;
+  // console.log('body..')
+  console.log(url);
+  // if (!image) {
+  //   return res.status(400).json({ error: "No image file provided." });
+  // }
+  // console.log("image selected..");
   //   textTweet(res);
 //   const imageFile = "C:\Users\rohit\Desktop\photos\wallpaper-805.jpg"
-tweet(image) 
+tweet(url) 
 //   mediaTweet(res, image);
   //   return res.status(200).json({ message: "ok" });
 });
