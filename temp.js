@@ -55,8 +55,8 @@ const tweet = async (url) => {
             console.log(e)
         }
     });
-
-    console.log('posted..')
+    const str = "posted...";
+    return str;
   }
 
 // Create tweet function which post
@@ -110,7 +110,8 @@ router.post("/api/uploadToTwitter", (req, res) => {
   // console.log("image selected..");
   //   textTweet(res);
 //   const imageFile = "C:\Users\rohit\Desktop\photos\wallpaper-805.jpg"
-tweet(url) 
+  const result =  tweet(url) 
+  res.send(result);
 //   mediaTweet(res, image);
   //   return res.status(200).json({ message: "ok" });
 });
