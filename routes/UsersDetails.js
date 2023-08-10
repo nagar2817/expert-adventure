@@ -8,7 +8,6 @@ router.get("/:username", async (req, res) => {
   try {
     const { username } = req.params;
     // const userIdToFind = "3"; // Assuming you have the _id value as a string
-
     const user = await User.findOne({username});  
     if (!user) {
       return res.status(404).json({ message: "User not found" });
