@@ -11,17 +11,6 @@ const pool = new Pool({
   connectionString: connectionString,
 });
 
-// mongoose.connect(process.env.MONGO_URL);
-// const database = mongoose.connection;
-
-// database.on("error", (error) => {
-//   console.log(error);
-// });
-
-// database.once("connected", () => {
-//   console.log("Database Connected");
-// });
-
 mongoose
   .connect(process.env.MONGO_URL, {
     useUnifiedTopology: true,

@@ -28,11 +28,6 @@ const educationSchema = new mongoose.Schema({
 });
 
 
-
-// const achievementSchema = new mongoose.Schema({
-//   title: { type: String },
-// });
-
 const skillsSetSchema = new mongoose.Schema({
   languages: { type: String },
   databases: { type: String },
@@ -42,8 +37,6 @@ const skillsSetSchema = new mongoose.Schema({
 });
 
 const userSchema = new mongoose.Schema({
-  //   _id: { type: mongoose.Types.ObjectId, auto: true },
-  // name: { type: String },
   email: { type: String }, 
   username:{type:String},
   aboutMe: { type: String },

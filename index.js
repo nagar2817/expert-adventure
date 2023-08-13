@@ -31,10 +31,6 @@ app.use('/usersinfo',UserInfoRouter);
 app.use('/users',UsersDetails); 
 app.use('/',TweetRouter); 
 
-app.get('/this',(req,res)=>{
-  res.send("hello");
-})
-
 
 process.on('uncaughtException', function (err) {
     console.log(err);

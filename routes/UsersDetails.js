@@ -12,11 +12,6 @@ router.get("/:username", async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    // const databaseName = mongoose.connection.name;
-    // const collectionName = User.collection.name;
-
-    // console.log("Database:", databaseName);
-    // console.log("Collection:", collectionName);
     console.log(user);
 
     return res.json(user);
@@ -26,24 +21,7 @@ router.get("/:username", async (req, res) => {
   }
 });
 
-// Update user details by userId
-// router.put("/:userId", async (req, res) => {
-//   try {
-//     const { userId } = req.params;
-//     const updatedUser = await User.findByIdAndUpdate(userId, req.body, {
-//       new: true,
-//     });
-//     if (!updatedUser) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-//     return res.json(updatedUser);
-//   } catch (error) {
-//     return res.status(500).json({ message: "Server error" });
-//   }
-// });
 
-// Create a new user document with userId
-// router.post("/:userId", async (req, res) => {
 router.post("/new", async (req, res) => {
   try {
     // const { userId } = req.params;
